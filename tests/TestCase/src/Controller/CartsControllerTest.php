@@ -381,11 +381,11 @@ class CartsControllerTest extends AppCakeTestCase
         $this->checkCartStatus();
 
         $manufacturerId = 5;
-        $this->changeManufacturerStatus($manufacturerId, APP_OFF);
+        $this->changeManufacturer($manufacturerId, 'active', 0);
         $this->finishCart();
         $this->checkValidationError();
         $this->assertMatchesRegularExpression('/Der Hersteller des Produktes (.*) hat entweder Lieferpause oder er ist nicht mehr aktiviert und das Produkt ist somit nicht mehr bestellbar./', $this->_response);
-        $this->changeManufacturerStatus($manufacturerId, APP_ON);
+        $this->changeManufacturer($manufacturerId, 'active', 1);
     }
 
     public function testManufacturerDeliveryBreakActivatedWhileShopping()
@@ -712,7 +712,7 @@ class CartsControllerTest extends AppCakeTestCase
 
     public function testProductsWithAllowedNegativeStock()
     {
-        $this->changeManufacturer(5, 'stock_management_enabled', true);
+        $this->changeManufacturer(5, 'stock_management_enabled', 1);
         $this->loginAsCustomer();
         $this->addProductToCart(349, 8);
         $this->assertJsonOk();
@@ -720,7 +720,7 @@ class CartsControllerTest extends AppCakeTestCase
 
     public function testProductsWithAllowedNegativeStockButTooHighAmount()
     {
-        $this->changeManufacturer(5, 'stock_management_enabled', true);
+        $this->changeManufacturer(5, 'stock_management_enabled', 1);
         $this->loginAsCustomer();
         $response = $this->addProductToCart(349, 11);
         $this->assertRegExpWithUnquotedString('Die gewünschte Anzahl <b>11</b> des Produktes <b>Lagerprodukt</b> ist leider nicht mehr verfügbar. Verfügbare Menge: 10', $response->msg);
@@ -792,7 +792,7 @@ class CartsControllerTest extends AppCakeTestCase
 
         $this->loginAsCustomer();
         $manufacturerId = $this->Customer->getManufacturerIdByCustomerId(Configure::read('test.vegetableManufacturerId'));
-        $this->changeManufacturer($manufacturerId, 'stock_management_enabled', true);
+        $this->changeManufacturer($manufacturerId, 'stock_management_enabled', 1);
 
         $this->placeOrderWithStockProducts();
 
@@ -1189,11 +1189,6 @@ class CartsControllerTest extends AppCakeTestCase
     private function changeProductStatus($productId, $status)
     {
         $this->Product->changeStatus([[$productId => $status]]);
-    }
-
-    private function changeManufacturerStatus($manufacturerId, $status)
-    {
-        $this->changeManufacturer($manufacturerId, 'active', $status);
     }
 
     /**

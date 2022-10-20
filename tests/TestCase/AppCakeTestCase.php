@@ -189,33 +189,30 @@ abstract class AppCakeTestCase extends TestCase
         $this->assertEquals($url, $expectedUrl, $msg);
     }
 
-    protected function changeReadOnlyConfiguration($configKey, $value)
+    protected function changeReadOnlyConfiguration(string $configKey, $value)
     {
-        $query = 'UPDATE ' . $this->Configuration->getTable() . ' SET value = :value WHERE name = :configKey';
-        $params = [
-            'value' => $value,
-            'configKey' => $configKey
-        ];
-        $statement = $this->dbConnection->prepare($query);
-        $statement->execute($params);
+        $configuration = $this->Configuration->find('all', [
+            'conditions' => [
+                'name' => $configKey,
+            ],
+        ])->first();
+        $configuration->value = $value;
+        $this->Configuration->save($configuration);
         $this->Configuration->loadConfigurations();
     }
 
     /**
      * needs to login as superadmin and logs user out automatically
-     *
-     * @param string $configKey
-     * @param string $newValue
      */
-    protected function changeConfiguration($configKey, $newValue)
+    protected function changeConfiguration(string $configKey, $value)
     {
-        $query = 'UPDATE fcs_configuration SET value = :newValue WHERE name = :configKey;';
-        $params = [
-            'newValue' => $newValue,
-            'configKey' => $configKey
-        ];
-        $statement = $this->dbConnection->prepare($query);
-        $statement->execute($params);
+        $configuration = $this->Configuration->find('all', [
+            'conditions' => [
+                'name' => $configKey,
+            ],
+        ])->first();
+        $configuration->value = $value;
+        $this->Configuration->save($configuration);
         $this->Configuration->loadConfigurations();
         $this->logout();
     }
@@ -228,13 +225,9 @@ abstract class AppCakeTestCase extends TestCase
 
     protected function changeManufacturerNoDeliveryDays($manufacturerId, $noDeliveryDays = '')
     {
-        $query = 'UPDATE fcs_manufacturer SET no_delivery_days = :noDeliveryDays WHERE id_manufacturer = :manufacturerId;';
-        $params = [
-            'manufacturerId' => $manufacturerId,
-            'noDeliveryDays' => $noDeliveryDays
-        ];
-        $statement = $this->dbConnection->prepare($query);
-        $statement->execute($params);
+        $manufacturer = $this->Manufacturer->get($manufacturerId);
+        $manufacturer->no_delivery_days = $noDeliveryDays;
+        $this->Manufacturer->save($manufacturer);
     }
 
     /**
@@ -366,27 +359,18 @@ abstract class AppCakeTestCase extends TestCase
         return $this->getJsonDecodedContent();
     }
 
-
     protected function changeManufacturer($manufacturerId, $field, $value)
     {
-        $query = 'UPDATE ' . $this->Manufacturer->getTable().' SET '.$field.' = :value WHERE id_manufacturer = :manufacturerId';
-        $params = [
-            'value' => $value,
-            'manufacturerId' => $manufacturerId
-        ];
-        $statement = $this->dbConnection->prepare($query);
-        return $statement->execute($params);
+        $manufacturer = $this->Manufacturer->get($manufacturerId);
+        $manufacturer->{$field} = $value;
+        $this->Manufacturer->save($manufacturer);
     }
 
     protected function changeCustomer($customerId, $field, $value)
     {
-        $query = 'UPDATE ' . $this->Customer->getTable().' SET '.$field.' = :value WHERE id_customer = :customerId';
-        $params = [
-            'value' => $value,
-            'customerId' => $customerId
-        ];
-        $statement = $this->dbConnection->prepare($query);
-        return $statement->execute($params);
+        $customer = $this->Customer->get($customerId);
+        $customer->{$field} = $value;
+        $this->Customer->save($customer);
     }
 
     protected function getCorrectedLogoPathInHtmlForPdfs($html)
@@ -406,7 +390,8 @@ abstract class AppCakeTestCase extends TestCase
 
     protected function resetCustomerCreditBalance() {
         $this->Payment = $this->getTableLocator()->get('Payments');
-        $this->dbConnection->execute('DELETE FROM ' . $this->Payment->getTable().' WHERE id = 2');
+        $payment = $this->Payment->get(2);
+        $this->Payment->delete($payment);
     }
 
     private function prepareSendingOrderListsOrInvoices($contentFolder)
