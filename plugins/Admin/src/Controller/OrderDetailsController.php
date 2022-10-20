@@ -1130,6 +1130,7 @@ class OrderDetailsController extends AdminAppController
                 'newOrderDetail' => $newOrderDetail,
                 'appAuth' => $this->AppAuth
             ]);
+            $email->addToQueue();
 
             $emailMessage = ' ' . __d('admin', 'An_email_was_sent_to_{0}.', ['<b>' . $oldOrderDetail->customer->name . '</b>']);
 
@@ -1141,10 +1142,9 @@ class OrderDetailsController extends AdminAppController
                     '<b>' . $oldOrderDetail->customer->name . '</b>',
                     '<b>' . $oldOrderDetail->product->manufacturer->name . '</b>'
                 ]);
-                $email->addCC($oldOrderDetail->product->manufacturer->address_manufacturer->email);
+                $email->setTo($oldOrderDetail->product->manufacturer->address_manufacturer->email);
+                $email->addToQueue();
             }
-
-            $email->addToQueue();
 
             $message .= $emailMessage;
 
@@ -1236,6 +1236,7 @@ class OrderDetailsController extends AdminAppController
             'appAuth' => $this->AppAuth,
             'editAmountReason' => $editAmountReason
         ]);
+        $email->addToQueue();
 
         $emailMessage = ' ' . __d('admin', 'An_email_was_sent_to_{0}.', ['<b>' . $oldOrderDetail->customer->name . '</b>']);
 
@@ -1247,10 +1248,9 @@ class OrderDetailsController extends AdminAppController
                 '<b>' . $oldOrderDetail->customer->name . '</b>',
                 '<b>' . $oldOrderDetail->product->manufacturer->name . '</b>'
             ]);
-            $email->addCC($oldOrderDetail->product->manufacturer->address_manufacturer->email);
+            $email->setTo($oldOrderDetail->product->manufacturer->address_manufacturer->email);
+            $email->addToQueue();
         }
-
-        $email->addToQueue();
 
         $message .= $emailMessage;
 
