@@ -116,8 +116,6 @@ class PagesControllerTest extends AppCakeTestCase
         ];
 
         $this->assertPagesForErrors($testUrls);
-
-        $this->logout();
     }
 
     /**
@@ -138,8 +136,6 @@ class PagesControllerTest extends AppCakeTestCase
         ];
 
         $this->assertPagesForErrors($testUrls);
-
-        $this->logout();
     }
 
     public function testAllManufacturerUrlsAnonymized()
@@ -182,7 +178,6 @@ class PagesControllerTest extends AppCakeTestCase
             $this->Slug->getCategoryDetail(4234, 'not valid category name')
         ];
         $this->assertPagesFor404($testUrls);
-        $this->logout();
     }
 
     public function testPageDetailOnlinePublicLoggedOut()
@@ -231,15 +226,12 @@ class PagesControllerTest extends AppCakeTestCase
         }
     }
 
-    protected function changePage($pageId, $isPrivate = 0, $active = 1)
+    protected function changePage($pageId, int $isPrivate = 0, int $active = 1)
     {
-        $query = 'UPDATE ' . $this->Page->getTable().' SET is_private = :isPrivate, active = :active WHERE id_page = :pageId;';
-        $params = [
-            'pageId' => $pageId,
-            'isPrivate' => $isPrivate,
-            'active' => $active
-        ];
-        $statement = $this->dbConnection->prepare($query);
-        $statement->execute($params);
+        $page = $this->Page->get($pageId);
+        $page->is_private = $isPrivate;
+        $page->active = $active;
+        $this->Page->save($page);
     }
+
 }
