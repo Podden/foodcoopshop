@@ -1108,11 +1108,12 @@ class OrderDetailsController extends AdminAppController
         }
         $this->changeOrderDetailQuantity($objectOrderDetailUnit, $productQuantity);
 
-        $message = __d('admin', 'The_weight_of_the_ordered_product_{0}_(amount_{1})_was_successfully_apapted_from_{2}_to_{3}.', [
+        $message = __d('admin', 'The_weight_of_the_ordered_product_{0}_(amount_{1},_order_date_{2})_was_successfully_apapted_from_{3}_to_{4}.', [
             '<b>' . $oldOrderDetail->product_name . '</b>',
             $oldOrderDetail->product_amount,
+            $oldOrderDetail->created->i18nFormat(Configure::read('app.timeHelper')->getI18Format('DateNTimeShort')),
             Configure::read('app.numberHelper')->formatUnitAsDecimal($oldOrderDetail->order_detail_unit->product_quantity_in_units) . ' ' . $oldOrderDetail->order_detail_unit->unit_name,
-            Configure::read('app.numberHelper')->formatUnitAsDecimal($productQuantity) . ' ' . $oldOrderDetail->order_detail_unit->unit_name
+            Configure::read('app.numberHelper')->formatUnitAsDecimal($productQuantity) . ' ' . $oldOrderDetail->order_detail_unit->unit_name,
         ]);
 
         $quantityWasChanged = $oldOrderDetail->order_detail_unit->product_quantity_in_units != $productQuantity;
@@ -1128,7 +1129,8 @@ class OrderDetailsController extends AdminAppController
                 'newsletterCustomer' => $oldOrderDetail->customer,
                 'newProductQuantityInUnits' => $productQuantity,
                 'newOrderDetail' => $newOrderDetail,
-                'appAuth' => $this->AppAuth
+                'message' => $message,
+                'appAuth' => $this->AppAuth,
             ]);
             $email->addToQueue();
 
@@ -1140,9 +1142,12 @@ class OrderDetailsController extends AdminAppController
             if (! $this->AppAuth->isManufacturer() && $oldOrderDetail->total_price_tax_incl > 0.00 && $sendOrderedProductPriceChangedNotification) {
                 $emailMessage = ' ' . __d('admin', 'An_email_was_sent_to_{0}_and_the_manufacturer_{1}.', [
                     '<b>' . $oldOrderDetail->customer->name . '</b>',
-                    '<b>' . $oldOrderDetail->product->manufacturer->name . '</b>'
+                    '<b>' . $oldOrderDetail->product->manufacturer->name . '</b>',
                 ]);
                 $email->setTo($oldOrderDetail->product->manufacturer->address_manufacturer->email);
+                $oldOrderDetail->customer = $this->Manufacturer->getCustomerRecord($oldOrderDetail->product->manufacturer->address_manufacturer->email);
+                $email->getRenderer()->set('oldOrderDetail', $oldOrderDetail);
+                $email->getRenderer()->set('newsletterCustomer', null);
                 $email->addToQueue();
             }
 

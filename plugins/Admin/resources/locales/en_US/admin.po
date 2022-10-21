@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2022-10-19 11:14+0200\n"
-"PO-Revision-Date: 2022-10-19 11:14+0200\n"
+"POT-Creation-Date: 2022-10-21 15:16+0200\n"
+"PO-Revision-Date: 2022-10-21 15:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "Language: en_US\n"
@@ -354,8 +354,8 @@ msgstr "The delivered quantity is not valid."
 msgid "The_new_price_would_be_{0}_for_{1}_please_check_the_unit."
 msgstr "The new price would be {0} for {1}. Please check the unit."
 
-msgid "The_weight_of_the_ordered_product_{0}_(amount_{1})_was_successfully_apapted_from_{2}_to_{3}."
-msgstr "The weight of the ordered product {0} (amount {1}) was successfully adapted from {2} to {3}."
+msgid "The_weight_of_the_ordered_product_{0}_(amount_{1},_order_date_{2})_was_successfully_apapted_from_{3}_to_{4}."
+msgstr "The weight of the ordered product {0} (amount {1}, order date {2}) was successfully adapted from {3} to {4}."
 
 msgid "Weight_adapted_for_\"0\":"
 msgstr "Weight adapted for \"{0}\":"
@@ -2283,9 +2283,6 @@ msgstr "New price"
 msgid "Why_has_the_price_been_adpated?"
 msgstr "Why has the price been adapted?"
 
-msgid "The_weight_of_the_product_{0}_has_been_adapted."
-msgstr "The weight of the product {0} has been adapated."
-
 msgid "Old_price_for"
 msgstr "Old price for"
 
@@ -2402,6 +2399,9 @@ msgstr "The delivered weight will eventually be adapted, so the price can change
 
 msgid "Product_ID"
 msgstr "ProductID"
+
+#~ msgid "The_weight_of_the_product_{0}_has_been_adapted."
+#~ msgstr "The weight of the product {0} has been adapated."
 
 #~ msgid "Software_update_version"
 #~ msgstr "Software update / Version"

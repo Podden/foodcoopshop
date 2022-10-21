@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2022-10-19 11:14+0200\n"
+"POT-Creation-Date: 2022-10-21 15:16+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -353,7 +353,7 @@ msgstr ""
 msgid "The_new_price_would_be_{0}_for_{1}_please_check_the_unit."
 msgstr ""
 
-msgid "The_weight_of_the_ordered_product_{0}_(amount_{1})_was_successfully_apapted_from_{2}_to_{3}."
+msgid "The_weight_of_the_ordered_product_{0}_(amount_{1},_order_date_{2})_was_successfully_apapted_from_{3}_to_{4}."
 msgstr ""
 
 msgid "Weight_adapted_for_\"0\":"
@@ -2274,9 +2274,6 @@ msgid "New_price"
 msgstr ""
 
 msgid "Why_has_the_price_been_adpated?"
-msgstr ""
-
-msgid "The_weight_of_the_product_{0}_has_been_adapted."
 msgstr ""
 
 msgid "Old_price_for"
